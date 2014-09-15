@@ -16,6 +16,7 @@
         if( !isset( $_REQUEST['shorturl'] ) ) {
             return array(
                 'statusCode' => 400,
+	    	'status' => 'fail',
                 'simple'     => "Need a 'shorturl' parameter",
                 'message'    => 'error: missing param',
             );
@@ -24,6 +25,7 @@
         if( !isset( $_REQUEST['url'] ) ) {
             return array(
                 'statusCode' => 400,
+	         'status' => 'fail',
                 'simple'     => "Need a 'url' parameter",
                 'message'    => 'error: missing param',
             );
@@ -35,6 +37,7 @@
         if( ! yourls_is_shorturl( $shorturl ) ) {
             return array(
                 'statusCode' => 404,
+	 	 'status' => 'fail',
                 'simple '    => 'Error: short URL not found',
                 'message'    => 'error: not found',
             );
@@ -52,6 +55,7 @@
         } else {
             return array(
                 'statusCode' => 500,
+	 	'status' => 'fail',
                 'simple'     => 'Error: could not edit shorturl, not sure why :-/',
                 'message'    => 'error: unknown error',
             );
@@ -62,6 +66,7 @@
         if ( ! isset( $_REQUEST['url'] ) ) {
             return array(
                 'statusCode' => 400,
+	 	'status' => 'fail',
                 'simple'     => "Need a 'url' parameter",
                 'message'    => 'error: missing param',
             );
@@ -80,10 +85,10 @@
         } else {
             return array(
                 'statusCode' => 500,
+	 	'status' => 'fail',
                 'simple'     => "Error: could not find keyword for url $url",
                 'message'    => 'error: not found',
                 'keyword'    => '',
             );
         }
     }
-?>
