@@ -4,7 +4,7 @@
      Plugin Name: Update Shortened URL
      Plugin URI: https://github.com/timcrockford/yourls-api-edit-url
      Description: Define a custom API action 'update' and 'geturl'
-     Version: 0.2.1
+     Version: 0.2.2
      Author: Tim Crockford
      Author URI: http://codearoundcorners.com/
      */
@@ -44,7 +44,7 @@
             return array(
                 'statusCode' => 404,
                 'status'     => 'fail',
-                'simple '    => 'Error: keyword '" . $keyword . "' not found',
+                'simple '    => "Error: keyword $keyword not found",
                 'message'    => 'error: not found',
             );
         }
@@ -55,7 +55,7 @@
         if( yourls_edit_link( $url, $keyword, $keyword, $title ) ) {
             return array(
                 'statusCode' => 200,
-                'simple'     => "Keyword $keyword updated to " . $url ,
+                'simple'     => "Keyword $keyword updated to $url",
                 'message'    => 'success: updated',
             );
         } else {
@@ -98,3 +98,4 @@
             );
         }
     }
+?>
