@@ -32,7 +32,7 @@
         }
 
         $shorturl = $_REQUEST['shorturl'];
-        $url = urldecode($_REQUEST['url']);
+        $url = $_REQUEST['url'];
 
         if ( yourls_get_protocol( $shorturl ) ) {
             $keyword = yourls_get_relative_url( $shorturl );
@@ -78,7 +78,7 @@
             );
         }
 
-        $url = urldecode($_REQUEST['url']);
+        $url = $_REQUEST['url'];
         $url_exists = yourls_url_exists($url);
 
         if ( $url_exists ) {
