@@ -3,7 +3,7 @@ yourls-api-edit-url
 
 YOURLS plugin to add two additional commands to the YOURLS API.
 - update - a function to update the long URL associated with a short code
-- geturl - a function to get the current long URL associated with a short code
+- geturl - a function to get the shortcode associated with a long URL
 - change_keyword - a function to update the short code associated with a URL
 
 The geturl function does not create a new short code if the URL does not exist, it's purely designed to verify if the URL has been set up. Currently this has not been tested on a site using duplicate URLs.
