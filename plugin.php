@@ -71,15 +71,6 @@
     }
 
     function api_edit_url_change_keyword() {
-        if ( ! isset( $_REQUEST['oldshorturl'] ) ) {
-            return array(
-                'statusCode' => 400,
-                'status'     => 'fail',
-                'simple'     => "Need a 'oldshorturl' parameter",
-                'message'    => 'error: missing param',
-            );
-        }
-
         if ( ! isset( $_REQUEST['newshorturl'] ) ) {
             return array(
                 'statusCode' => 400,
@@ -89,18 +80,56 @@
             );
         }
 
-        if ( ! isset( $_REQUEST['url'] ) ) {
+        if ( ! isset( $_REQUEST['url'] ) && ! isset( $_REQUEST['oldshorturl'] )) {
             return array(
                 'statusCode' => 400,
                 'status'     => 'fail',
-                'simple'     => "Need a 'url' parameter",
+                'simple'     => "Need a 'url' or 'oldshorturl' parameter",
                 'message'    => 'error: missing param',
             );
         }
 
-        $oldshorturl = $_REQUEST['oldshorturl'];
+        if ( isset( $_REQUEST['url'] ) && ! isset( $_REQUEST['oldshorturl'] )) {
+            $url = urldecode($_REQUEST['url']);
+            if ( ! yourls_get_longurl_keywords( $url )) {
+                return array(
+                    'statusCode' => 500,
+                    'status'     => 'fail',
+                    'simple'     => "Error: could not find keyword for url $url",
+                    'message'    => 'error: not found $url',
+                    'keyword'    => '',
+                );
+            }
+
+            $keywords = yourls_get_longurl_keywords( $url );
+            if ( sizeof($keywords) > 1) {
+                return array(
+                    'statusCode' => 400,
+                    'status'     => 'fail',
+                    'simple'     => "Given URL has multiple shortcodes",
+                    'message'    => 'error: ambiguous url',
+                );
+            } else {
+                $oldshorturl = array_values( $keywords )[0];
+            }
+        } elseif ( ! isset( $_REQUEST['url'] )) {
+            $oldshorturl = $_REQUEST['oldshorturl'];
+            if ( ! yourls_is_shorturl( $oldshorturl ) ) {
+                return array(
+                    'statusCode' => 404,
+                    'status'     => 'fail',
+                    'simple '    => "Error: keyword $keyword not found",
+                    'message'    => 'error: not found',
+                );
+            }
+
+            $url = yourls_get_keyword_longurl( $oldshorturl );
+        } else {
+            $oldshorturl = $_REQUEST['oldshorturl'];
+            $url = urldecode($_REQUEST['url']);
+        }
+
         $newshorturl = $_REQUEST['newshorturl'];
-        $url = urldecode($_REQUEST['url']);
 
         if ( yourls_get_protocol( $oldshorturl ) ) {
             $oldkeyword = yourls_get_relative_url( $oldshorturl );
@@ -156,12 +185,22 @@
         $url_exists = yourls_url_exists($url);
 
         if ( $url_exists ) {
-            return array(
-                'statusCode' => 200,
-                'simple'     => "Keyword for $url is " . $url_exists->keyword,
-                'message'    => 'success: found',
-                'keyword'    => $url_exists->keyword,
-            );
+            if ( isset( $_REQUEST['exactly_one'] ) && ! filter_var( $_REQUEST['exactly_one'], FILTER_VALIDATE_BOOLEAN )) {
+                $keywords = yourls_get_longurl_keywords( $url );
+                return array(
+                    'statusCode' => 200,
+                    'simple'     => "Keywords for $url are " . json_encode ( $keywords ),
+                    'message'    => 'success: found',
+                    'keyword'    => json_encode( $keywords ),
+                );
+            } else {
+                return array(
+                    'statusCode' => 200,
+                    'simple'     => "Keyword for $url is " . $url_exists->keyword,
+                    'message'    => 'success: found',
+                    'keyword'    => $url_exists->keyword,
+                );
+            }
         } else {
             return array(
                 'statusCode' => 500,
