@@ -38,7 +38,7 @@ The `update` function lets a site update the long URL associated with a short co
 
 * `shorturl`: The shorturl to update.
 * `url`: The new URL.
-* `title`: Optional. The title of the new URL. Empty by default.
+* `title`: Optional. The title of the new URL. Pass `'keep'` to keep the current title or `'auto'` to infer the title from the url. Empty by default.
 
 ### Return values of the JSON response
 
@@ -48,14 +48,14 @@ None.
 ----------------
 The `change_keyword`  lets a site update the short URL associated with a long URL.
 On sites, where each long URL has at most one short URL, `oldshorturl` and `url` can be used interchangeable.
-On sites, where a long URL can have multiple short URL, `oldshortulr` must be used and passing `url` will raise an error.
+On sites, where a long URL can have multiple short URL, `oldshorturl` must be used and passing `url` will raise an error.
 
 ### Parameters
 
 * `newshorturl`: The new short URL.
 * `oldshorturl`: Optional. The short URL to update.
 * `url`: Optional. The long URL whose short URL is to be updated.
-* `title`: Optional. The title of the new URL. Empty by default.
+* `title`: Optional. The title of the new URL. Pass `'keep'` to keep the current title or `'auto'` to infer the title from the url. Empty by default.
 
 ### Return values of the JSON response
 

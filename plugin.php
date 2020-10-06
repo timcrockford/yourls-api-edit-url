@@ -11,8 +11,17 @@
     
     yourls_add_filter( 'api_action_update', 'api_edit_url_update' );
     yourls_add_filter( 'api_action_geturl', 'api_edit_url_get' );
-    
     yourls_add_filter( 'api_action_change_keyword', 'api_edit_url_change_keyword' );
+
+    function process_title( $title, $url, $keyword ) {
+        if ( strcasecmp($title, 'keep') == 0 ) {
+            return yourls_get_keyword_info( $keyword, 'title', '' );
+        } elseif ( strcasecmp($title, 'auto') == 0 ){
+            return yourls_get_remote_title( $url );
+        } else {
+            return $title;
+        }
+    }
     
     function api_edit_url_update() {
         if ( ! isset( $_REQUEST['shorturl'] ) ) {
@@ -53,6 +62,7 @@
 
         $title = '';
         if ( isset($_REQUEST['title']) ) $title = $_REQUEST['title'];
+        $title = process_title( $title, $url, $shorturl );
 
         if( yourls_edit_link( $url, $keyword, $keyword, $title ) ) {
             return array(
@@ -154,6 +164,7 @@
 
         $title = '';
         if ( isset($_REQUEST['title']) ) $title = $_REQUEST['title'];
+        $title = process_title( $title, $url, $oldshorturl );
 
         if( yourls_edit_link( $url, $oldkeyword, $newkeyword, $title ) ) {
             return array(
