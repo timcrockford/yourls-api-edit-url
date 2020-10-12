@@ -15,7 +15,7 @@
 
     function process_title( $title, $url, $keyword ) {
         if ( strcasecmp($title, 'keep') == 0 ) {
-            return yourls_get_keyword_info( $keyword, 'title', '' );
+            return  yourls_get_keyword_title( $keyword, '' );
         } elseif ( strcasecmp($title, 'auto') == 0 ){
             return yourls_get_remote_title( $url );
         } else {
@@ -62,7 +62,7 @@
 
         $title = '';
         if ( isset($_REQUEST['title']) ) $title = $_REQUEST['title'];
-        $title = process_title( $title, $url, $shorturl );
+        $title = process_title( $title, $url, $keyword );
 
         if( yourls_edit_link( $url, $keyword, $keyword, $title ) ) {
             return array(
