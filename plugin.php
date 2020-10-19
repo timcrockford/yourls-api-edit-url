@@ -107,7 +107,6 @@
                     'status'     => 'fail',
                     'simple'     => "Error: could not find keyword for url $url",
                     'message'    => 'error: not found $url',
-                    'keyword'    => '',
                 );
             }
 
@@ -159,6 +158,15 @@
                 'status'     => 'fail',
                 'simple '    => "Error: keyword $newkeyword already exists",
                 'message'    => 'error: already exists',
+            );
+        }
+
+        if ( ! yourls_keyword_is_taken( $oldkeyword ) ) {
+            return array(
+                'statusCode' => 404,
+                'status'     => 'fail',
+                'simple '    => "Error: keyword $oldkeyword not found",
+                'message'    => 'error: not found',
             );
         }
 
